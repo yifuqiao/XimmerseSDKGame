@@ -2,6 +2,7 @@
 using System.Collections;
 using Ximmerse.Animation;
 
+[RequireComponent(typeof(CharacterController))]
 public class FPSController : MonoBehaviour {
 
     [SerializeField]
@@ -32,6 +33,7 @@ public class FPSController : MonoBehaviour {
 
     private HandAnimator m_leftHandAnimator;
     private HandAnimator m_rightHandAnimator;
+    private CharacterController m_characterController;
 
     void Awake()
     {
@@ -49,6 +51,7 @@ public class FPSController : MonoBehaviour {
 
         m_leftHandAnimator = m_leftHandTransform.GetComponent<HandAnimator>();
         m_rightHandAnimator = m_rightHandTransform.GetComponent<HandAnimator>();
+        m_characterController = GetComponent<CharacterController>();
 
     }
 
@@ -110,10 +113,10 @@ public class FPSController : MonoBehaviour {
     }
     private void InputDispatcher_OnVerticalInput(float obj)
     {
-        transform.position += transform.forward * obj * m_movementSpeed * Time.deltaTime;
+        m_characterController.Move(transform.forward * obj * m_movementSpeed * Time.deltaTime);
     }
     private void InputDispatcher_OnHorizontalInput(float obj)
     {
-        transform.position += transform.right * obj * m_movementSpeed * Time.deltaTime;
+        m_characterController.Move(transform.right * obj * m_movementSpeed*Time.deltaTime);
     }
 }

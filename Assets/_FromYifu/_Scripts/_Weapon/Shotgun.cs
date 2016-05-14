@@ -4,7 +4,6 @@ using System;
 
 public class Shotgun : WeaponBase
 {
-    private float m_accuTime = 0f;
     private bool m_bCanFire = true;
     private bool m_bIsReloading = false;
     private AudioSource m_audioSource;
@@ -27,7 +26,7 @@ public class Shotgun : WeaponBase
 
     public override void Fire()
     {
-        if (m_bCanFire == false || m_curAmmoCount<=0)
+        if (m_bCanFire == false || m_curAmmoCount<=0 || m_bIsReloading)
             return;
         --m_curAmmoCount;
         StartCoroutine(DoFireEffect());
@@ -47,8 +46,14 @@ public class Shotgun : WeaponBase
     public override void Reload()
     {
         m_bIsReloading = true;
-        m_accuTime = 0f;
         m_animator.SetBool("Reload", true);
         m_audioSource.PlayOneShot(m_sfReloadClip);
+        StartCoroutine(DoReloading());
     }
+    private IEnumerator DoReloading()
+    {
+        yield return new WaitForSeconds(2f);
+        m_bIsReloading = false;
+    }
+
 }
